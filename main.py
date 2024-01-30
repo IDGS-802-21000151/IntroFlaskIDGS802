@@ -1,14 +1,38 @@
 from flask import Flask, request, render_template
 
+import forms
+
 app = Flask(__name__)
 
 @app.route("/")
 def cargarIndex():
     return render_template("index.html")
 
-@app.route("/alumnos")
+@app.route("/alumnos", methods=["GET", "POST"])
 def cargarAlumnos():
-    return render_template("alumnos.html")
+    alumno_form = forms.UserForm(request.form)
+    
+    if request.method == "POST":
+        nombre = alumno_form.nombre.data
+        email = alumno_form.email.data
+        materias = alumno_form.materias.data
+        
+        print(materias)
+    
+    return render_template("alumnos.html", form = alumno_form)
+
+@app.route("/distancia-entre-puntos", methods=["GET", "POST"])
+def cargarAlumnos():
+    formulario = forms.UserForm(request.form)
+    
+    if request.method == "POST":
+        nombre = alumno_form.nombre.data
+        email = alumno_form.email.data
+        materias = alumno_form.materias.data
+        
+        print(materias)
+    
+    return render_template("alumnos.html", form = alumno_form)
 
 @app.route("/maestros")
 def cargarMaestros():
