@@ -32,7 +32,6 @@ def cargarGuardarDiccionario():
         return render_template("diccionario.html", form = form, resultado = "Palabra guardada correctamente")
     
     return render_template("diccionario.html", form = form)
-
 @app.route("/consultar-diccionario", methods=["GET", "POST"])
 def cargarConsultarDiccionario():
     form = forms.consultarForm(request.form)

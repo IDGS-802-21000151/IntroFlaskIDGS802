@@ -2,7 +2,6 @@ from wtforms import Form
 from wtforms import StringField, TextAreaField, SelectField, RadioField, IntegerField
 from wtforms import EmailField
 from wtforms import validators
-
 class UserForm(Form):
     nombre = StringField("Ingresa el nombre", [
         validators.DataRequired(message="El campo nombre es requerido"),

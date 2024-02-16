@@ -6,7 +6,6 @@ archivo_texto = open("anombres.txt", "r")
 print(archivo_texto.read())
 
 archivo_texto.seek(0)
-
 print(archivo_texto.read())
 
 for lineas in archivo_texto.readlines():
