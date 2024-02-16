@@ -6,8 +6,10 @@
 
 <form action="/alumnos" method="POST">
   {{ macros.input_Form(form.nombre, class="form-control") }}
-  {{ macros.input_Form(form.email, class="form-control") }}
-  {{ macros.input_Form(form.materias, class="form-control") }}
+  {{ macros.input_Form(form.primerApellido, class="form-control") }}
+  {{ macros.input_Form(form.segundoApellido, class="form-control") }}
+  {{ macros.input_Form(form.edad, class="form-control") }}
+  {{ macros.input_Form(form.correo, class="form-control") }}
 
   <button type="submit" class="btn btn-success">Mandar datos</button>
 </form>

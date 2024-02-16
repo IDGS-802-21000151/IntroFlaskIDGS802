@@ -1,0 +1,17 @@
+{% extends "layout2.html" %}
+
+{% block content %}
+{% import "_macros.html" as macros %}
+<h1>Alumnos</h1>
+
+<form action="/consultar-diccionario" method="POST" novalidate>
+    {{ macros.input_Form(form.palabraTraducir, class="form-control") }}
+    {{ macros.radio(form.idiomaConsultar) }}
+
+    <button type="submit" class="btn btn-success">Consultar</button>
+</form>
+
+{% if resultado %}
+{{ resultado }}
+{% endif %}
+{% endblock %}

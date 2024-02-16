@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from io import open
 
 import forms
 
@@ -12,27 +13,75 @@ def cargarIndex():
 def cargarAlumnos():
     alumno_form = forms.UserForm(request.form)
     
-    if request.method == "POST":
+    if request.method == "POST" and alumno_form.validate():
         nombre = alumno_form.nombre.data
-        email = alumno_form.email.data
-        materias = alumno_form.materias.data
-        
-        print(materias)
     
     return render_template("alumnos.html", form = alumno_form)
 
+@app.route("/guardar-diccionario", methods=["GET", "POST"])
+def cargarGuardarDiccionario():
+    form = forms.DiccionarioForm(request.form)
+    
+    if request.method == "POST" and form.validate():
+        palabraIngles = form.palabraIngles.data
+        palabraEspaniol = form.palabraEspaniol.data
+        
+        archivoDiccionario = open("diccionario.txt", "a")
+        archivoDiccionario.write(f"{palabraIngles}:{palabraEspaniol}\n")
+        
+        return render_template("diccionario.html", form = form, resultado = "Palabra guardada correctamente")
+    
+    return render_template("diccionario.html", form = form)
+
+@app.route("/consultar-diccionario", methods=["GET", "POST"])
+def cargarConsultarDiccionario():
+    form = forms.consultarForm(request.form)
+    
+    if request.method == "POST" and form.validate():
+        palabraTraducir = form.palabraTraducir.data
+        idiomaConsultar = form.idiomaConsultar.data
+        
+        archivoDiccionario = open("diccionario.txt", "r")
+        
+        traduccionEncontrada = ""
+        print(palabraTraducir)
+        
+        for lineas in archivoDiccionario.readlines():
+            traduccion = lineas.rstrip().split(":")
+            print(traduccion[0])
+            
+            if(idiomaConsultar == "1"):
+                # INGLES
+                if(palabraTraducir == str(traduccion[0])):
+                    traduccionEncontrada = str(traduccion[1])
+                    break
+            else:
+                # ESPAÑOL
+                if(palabraTraducir == str(traduccion[1])):
+                    traduccionEncontrada = str(traduccion[0])
+                    break
+                
+        if traduccionEncontrada == "":
+            resultado = "No se encontro ninguna traducción"
+        else:
+            resultado = f"La traducción de {palabraTraducir} es {traduccionEncontrada}"
+        
+        return render_template("consultar.html", form = form, resultado = resultado)
+    
+    return render_template("consultar.html", form = form)
+
 @app.route("/distancia-entre-puntos", methods=["GET", "POST"])
-def cargarAlumnos():
+def cargarDistancia():
     formulario = forms.UserForm(request.form)
     
     if request.method == "POST":
-        nombre = alumno_form.nombre.data
-        email = alumno_form.email.data
-        materias = alumno_form.materias.data
+        nombre = formulario.nombre.data
+        email = formulario.email.data
+        materias = formulario.materias.data
         
         print(materias)
     
-    return render_template("alumnos.html", form = alumno_form)
+    return render_template("alumnos.html", form = formulario)
 
 @app.route("/maestros")
 def cargarMaestros():
