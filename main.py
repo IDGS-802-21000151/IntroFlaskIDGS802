@@ -1,9 +1,30 @@
 from flask import Flask, request, render_template
+from flask_wtf.csrf import CSRFProtect
 from io import open
+from flask import g
+
+from flask import flash
 
 import forms
 
 app = Flask(__name__)
+
+app.secret_key = 'clavesecreta'
+
+@app.errorhandler(404)
+def page_not_found(e):
+    print(e)
+    return render_template("404.html")
+
+@app.before_request
+def beforeRequest():
+    g.prueba = "Hola desde global"
+    print("Antes de request")
+    
+@app.after_request
+def afterRequest(response):
+    print("Despues de request")
+    return response
 
 @app.route("/")
 def cargarIndex():
@@ -11,11 +32,20 @@ def cargarIndex():
 
 @app.route("/alumnos", methods=["GET", "POST"])
 def cargarAlumnos():
+    
+    print("Dentro de alumnos")
+    print(g.prueba)
     alumno_form = forms.UserForm(request.form)
     
     if request.method == "POST" and alumno_form.validate():
         nombre = alumno_form.nombre.data
-    
+        primerApellido = alumno_form.primerApellido
+        segundoApellido = alumno_form.segundoApellido
+        
+        mensaje = f"Bienvenido: {nombre}"
+        
+        flash(mensaje)
+        
     return render_template("alumnos.html", form = alumno_form)
 
 @app.route("/guardar-diccionario", methods=["GET", "POST"])
